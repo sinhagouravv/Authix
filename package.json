@@ -3,11 +3,21 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "admin",
+    "vendor"
   ],
   "scripts": {
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
+    "dev:admin": "npm run dev --workspace=admin",
+    "dev:vendor": "npm run dev --workspace=vendor",
+    "test:db": "npx tsx backend/src/test-db.ts",
     "install:all": "npm install"
+  },
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0"
   }
 }
