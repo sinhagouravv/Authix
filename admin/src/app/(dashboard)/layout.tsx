@@ -3,9 +3,32 @@
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { SidebarProvider, useSidebar } from "@/context/SidebarContext";
+import { VaultProvider, useVault } from "@/context/VaultContext";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const { isCollapsed } = useSidebar();
+  const { isUnlocked } = useVault();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Protect sensitive routes
+  useEffect(() => {
+    const protectedPaths = [
+      '/logs', 
+      '/activity-logs', 
+      '/security-logs', 
+      '/api-keys',
+      '/login-requests'
+    ];
+    
+    const isProtected = protectedPaths.some(path => pathname === path);
+    
+    if (isProtected && !isUnlocked) {
+      router.replace('/vault');
+    }
+  }, [isUnlocked, pathname, router]);
   
   return (
     <div className="flex">
@@ -33,9 +56,11 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <DashboardContent>
-        {children}
-      </DashboardContent>
+      <VaultProvider>
+        <DashboardContent>
+          {children}
+        </DashboardContent>
+      </VaultProvider>
     </SidebarProvider>
   );
 }
