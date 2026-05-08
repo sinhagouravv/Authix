@@ -42,7 +42,6 @@ export default function Sidebar() {
               </div>
           </div>
           
-          {/* Logo icon only when collapsed */}
           {isCollapsed && (
               <Image
                   src="/AuthixLogo.svg"
