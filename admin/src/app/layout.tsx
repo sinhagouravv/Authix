@@ -4,6 +4,12 @@ import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AlertProvider } from "@/context/AlertContext";
 import { DeleteModalProvider } from "@/context/DeleteModalContext";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Authix | Admin Panel",
+  description: "Secure administrative control center for the Authix platform.",
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
