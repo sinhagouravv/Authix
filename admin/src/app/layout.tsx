@@ -4,6 +4,8 @@ import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AlertProvider } from "@/context/AlertContext";
 import { DeleteModalProvider } from "@/context/DeleteModalContext";
+import { CalendarProvider } from "@/context/CalendarContext";
+import { ExportProvider } from "@/context/ExportContext";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -38,7 +40,11 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} antialiased`}>
         <AlertProvider>
           <DeleteModalProvider>
-            {children}
+            <CalendarProvider>
+              <ExportProvider>
+                {children}
+              </ExportProvider>
+            </CalendarProvider>
           </DeleteModalProvider>
         </AlertProvider>
       </body>
