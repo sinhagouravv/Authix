@@ -1,8 +1,16 @@
 'use client';
 
 import React from 'react';
+import { FolderDown, Eye, Trash2, Activity } from 'lucide-react';
+import { useAlert } from '@/context/AlertContext';
+import { useExport } from '@/context/ExportContext';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export default function ActivityLogsPage() {
+  const { triggerAlert } = useAlert();
+  const { openExport } = useExport();
+  const [logs, setLogs] = React.useState<any[]>([]); // Future: Fetch real activity logs
   const [lastRefreshed, setLastRefreshed] = React.useState<Date | null>(null);
   const [mounted, setMounted] = React.useState(false);
   const [filter, setFilter] = React.useState<'ALL' | 'FRONTEND' | 'VENDOR_PANEL'>('ALL');
@@ -13,18 +21,53 @@ export default function ActivityLogsPage() {
     setLastRefreshed(new Date());
   }, []);
 
+  const handleDownloadPDF = (filteredLogs: any[]) => {
+    const doc = new jsPDF();
+    
+    // Add Branding
+    doc.setFontSize(22);
+    doc.setTextColor(5, 37, 88); // #052558
+    doc.text("AUTHIX ACTIVITY REPORT", 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
+    doc.text(`Report Type: Operational Activity Summary`, 14, 33);
+    
+    const tableData = filteredLogs.map(log => [
+      log.id || 'ACT-101',
+      log.action || 'System Update',
+      log.entity || 'General',
+      log.user || 'Admin',
+      log.ip || '127.0.0.1',
+      new Date(log.createdAt || log.timestamp).toLocaleString(),
+      log.status || 'SUCCESS'
+    ]);
+
+    autoTable(doc, {
+      startY: 40,
+      head: [['Activity ID', 'Action', 'Entity', 'User', 'IP Address', 'Date & Time', 'Status']],
+      body: tableData,
+      headStyles: { fillColor: [5, 37, 88], textColor: [255, 255, 255] },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+    });
+
+    doc.save(`Authix_Activity_Logs_${new Date().getTime()}.pdf`);
+    triggerAlert("Activity Report Downloaded Successfully", "success");
+  };
+
   return (
     <div className="space-y-5 pb-0.25 px-0.25">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-6">
           <h1 className="text-3xl font-semibold uppercase">Activity Logs</h1>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.25">
             <div className="relative group">
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value as any)}
-                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-3.5 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
+                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-4 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
               >
                 {[
                   { id: 'ALL', label: 'All' },
@@ -42,7 +85,7 @@ export default function ActivityLogsPage() {
               <select
                 value={limit}
                 onChange={(e) => setLimit(e.target.value as any)}
-                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-3.5 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
+                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-4 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
               >
                 {['ALL', '25', '50', '75', '100'].map((val) => (
                   <option key={val} value={val} className="font-bold text-[#052558] text-center bg-white">
@@ -51,6 +94,13 @@ export default function ActivityLogsPage() {
                 ))}
               </select>
             </div>
+
+            <button
+              onClick={() => openExport({ logs, handleDownloadPDF, title: "Export Activity Logs" })}
+              className="px-4 py-1 bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 text-[#052558] hover:bg-white/80 transition-all duration-300"
+            >
+              <FolderDown size={18} />
+            </button>
           </div>
         </div>
         <div className="text-[12.5px] uppercase text-gray-500 font-semibold self-end md:self-center mb-1 h-5">
@@ -84,6 +134,7 @@ export default function ActivityLogsPage() {
           </tbody>
         </table>
       </div>
+      
     </div>
   );
 }
