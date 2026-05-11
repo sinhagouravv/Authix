@@ -6,8 +6,10 @@ import { Eye, Trash2, Download, FolderDown, X, Shield, Globe, ChevronLeft, Monit
 import { getLogs, deleteLog } from './actions';
 import { useAlert } from '@/context/AlertContext';
 import { useDeleteModal } from '@/context/DeleteModalContext';
+import { useCalendar } from '@/context/CalendarContext';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { useExport } from '@/context/ExportContext';
 
 export default function LogsPage() {
   const [logs, setLogs] = React.useState<any[]>([]);
@@ -15,7 +17,7 @@ export default function LogsPage() {
   const [lastRefreshed, setLastRefreshed] = React.useState<Date | null>(null);
   const [mounted, setMounted] = React.useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = React.useState(false);
-  const [isBulkExportOpen, setIsBulkExportOpen] = React.useState(false);
+  const { openExport } = useExport();
   const [selectedLog, setSelectedLog] = React.useState<any>(null);
   
   // Bulk Export Filters
@@ -163,12 +165,12 @@ export default function LogsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-6">
           <h1 className="text-3xl font-semibold uppercase">Authentication Logs</h1>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.25">
             <div className="relative group">
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value as any)}
-                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-3.5 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
+                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-4 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
               >
                 {[
                   { id: 'ALL', label: 'All' },
@@ -186,7 +188,7 @@ export default function LogsPage() {
               <select
                 value={limit}
                 onChange={(e) => setLimit(e.target.value as any)}
-                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-3.5 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
+                className="bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 px-4 py-1 text-[12px] font-semibold  outline-none cursor-pointer w-auto transition-all duration-300 appearance-none text-center uppercase  hover:bg-white/80"
               >
                 {['ALL', '25', '50', '75', '100'].map((val) => (
                   <option key={val} value={val} className="font-bold text-[#052558] text-center bg-white">
@@ -197,9 +199,8 @@ export default function LogsPage() {
             </div>
 
             <button
-              onClick={() => setIsBulkExportOpen(true)}
+              onClick={() => openExport({ logs, handleDownloadPDF })}
               className="px-4 py-1 bg-white/10 backdrop-blur-xl border border-white rounded-xl shadow-sm shadow-[#052558]/25 text-[#052558] hover:bg-white/80 transition-all duration-300"
-              title="Bulk Export Logs"
             >
               <FolderDown size={18} />
             </button>
@@ -411,138 +412,12 @@ export default function LogsPage() {
               </div>
             </div>
 
-            {/* Technical Context */}
-            {/* <div className="space-y-4">
-              <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Technical Context</h4>
-              <div className="w-full bg-white border border-[#e6f0fa] p-5 rounded-xl shadow-sm uppercase">
-                <p className="text-xs font-bold text-gray-400 tracking-tight mb-2">Raw User Agent String</p>
-                <div className="p-3 bg-slate-50 rounded-lg text-[11px] font-mono text-gray-500 break-all leading-relaxed border border-slate-100">
-                  {selectedLog.userAgent}
-                </div>
-              </div>
-            </div> */}
           </div>
+
         </div>
       </div>,
       document.body
     )}
-    {isBulkExportOpen && (
-      <BulkExportModal 
-        isOpen={isBulkExportOpen}
-        onClose={() => setIsBulkExportOpen(false)}
-        logs={logs}
-        handleDownloadPDF={handleDownloadPDF}
-      />
-    )}
     </>
-  );
-}
-
-// Bulk Export Modal Component (Simplified for integration)
-function BulkExportModal({ 
-  isOpen, 
-  onClose, 
-  logs, 
-  handleDownloadPDF 
-}: { 
-  isOpen: boolean, 
-  onClose: () => void, 
-  logs: any[],
-  handleDownloadPDF: (log: any | any[]) => void 
-}) {
-  const [vendor, setVendor] = React.useState('');
-  const [portal, setPortal] = React.useState<'ALL' | 'frontend' | 'vendor'>('ALL');
-  const [date, setDate] = React.useState('');
-
-  if (!isOpen) return null;
-
-  const handleExport = () => {
-    let filtered = [...logs];
-    
-    if (vendor) {
-      filtered = filtered.filter(l => 
-        l.vendorId?.toLowerCase().includes(vendor.toLowerCase()) || 
-        l.vendorEmail?.toLowerCase().includes(vendor.toLowerCase())
-      );
-    }
-    
-    if (portal !== 'ALL') {
-      filtered = filtered.filter(l => l.portal === portal);
-    }
-    
-    if (date) {
-      filtered = filtered.filter(l => {
-        const d = new Date(l.createdAt).toISOString().split('T')[0];
-        return d === date;
-      });
-    }
-
-    if (filtered.length === 0) {
-      alert('No logs found matching these criteria');
-      return;
-    }
-
-    handleDownloadPDF(filtered);
-    onClose();
-  };
-
-  return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#011023]/10 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col animate-in zoom-in-95 duration-300" onClick={(e) => e.stopPropagation()}>
-        <div className="p-6 border-b border-[#e6f0fa] flex justify-between items-center bg-gradient-to-r from-blue-50/50 to-white">
-          <div>
-            <h3 className="text-xl uppercase font-bold text-[#052558]">Bulk Export Logs</h3>
-            <p className="text-sm text-gray-500 mt-1 uppercase tracking-tighter">Configure Export Criteria</p>
-          </div>
-          <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="p-6 space-y-6">
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Specific Vendor (ID/Email)</label>
-            <input 
-              type="text" 
-              value={vendor}
-              onChange={(e) => setVendor(e.target.value)}
-              placeholder="All Vendors"
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:bg-white focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-bold text-[#052558]"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Portal Source</label>
-            <select 
-              value={portal}
-              onChange={(e) => setPortal(e.target.value as any)}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:bg-white outline-none transition-all font-bold text-[#052558] appearance-none"
-            >
-              <option value="ALL">All Portals</option>
-              <option value="frontend">Frontend Application</option>
-              <option value="vendor">Vendor Dashboard</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Target Date</label>
-            <input 
-              type="date" 
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:bg-white outline-none transition-all font-bold text-[#052558]"
-            />
-          </div>
-
-          <button
-            onClick={handleExport}
-            className="w-full py-4 bg-[#052558] text-white rounded-xl font-bold text-xs uppercase tracking-[0.2em] shadow-xl shadow-blue-500/10 hover:bg-[#011023] transition-all mt-4 flex items-center justify-center gap-2"
-          >
-            <Download size={16} /> Export Selected Logs
-          </button>
-        </div>
-      </div>
-    </div>,
-    document.body
   );
 }
