@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
+import mongoose from 'mongoose';
 import { Admin } from '@backend/models/Admin';
+import { VaultPassword } from '@backend/models/VaultPassword';
 import bcrypt from 'bcryptjs';
 
 export async function GET() {
@@ -12,9 +14,11 @@ export async function GET() {
 
     // 1. Atomic Purge: Remove existing admin to ensure a clean slate
     await Admin.deleteMany({ adminId: initialAdminId });
+    await VaultPassword.deleteMany({}); // Clear existing vault passwords
 
-    // 2. Fresh Creation: Create the superadmin with zero passkeys
+    // 2. Fresh Creation: Create the superadmin and vault password
     const hashedPassword = await bcrypt.hash(initialAdminPassword, 10);
+    const initialVaultPassword = await bcrypt.hash("171121", 10);
     
     await Admin.create({
       adminId: initialAdminId,
@@ -22,6 +26,11 @@ export async function GET() {
       password: hashedPassword,
       role: "superadmin",
       passkeys: [] // Ensure passkeys are absolutely empty
+    });
+
+    await VaultPassword.create({
+      vaultType: 'logs-vault',
+      password: initialVaultPassword
     });
 
     console.log('[Setup Admin] Database purged and recreated successfully.');
