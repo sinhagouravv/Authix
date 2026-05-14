@@ -15,7 +15,10 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
   return (
-    <SidebarContext.Provider value={{ isCollapsed, toggleSidebar }}>
+    <SidebarContext.Provider value={{ 
+      isCollapsed, 
+      toggleSidebar
+    }}>
       {children}
     </SidebarContext.Provider>
   );
