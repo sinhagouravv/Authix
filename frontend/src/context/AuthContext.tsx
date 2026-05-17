@@ -1,12 +1,14 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getSession, logoutVendor } from '@/app/auth-actions';
 
 interface AuthContextType {
   user: any;
   login: (userData: any) => void;
   logout: () => void;
   isLoading: boolean;
+  refreshSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -15,30 +17,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('authix_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  const refreshSession = async () => {
+    try {
+      const session = await getSession();
+      setUser(session);
+    } catch (err) {
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    refreshSession();
   }, []);
 
   const login = (userData: any) => {
     setUser(userData);
-    localStorage.setItem('authix_user', JSON.stringify(userData));
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await logoutVendor();
     setUser(null);
-    localStorage.removeItem('authix_user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading, refreshSession }}>
       {children}
     </AuthContext.Provider>
   );
 }
+
 
 export function useAuth() {
   const context = useContext(AuthContext);
