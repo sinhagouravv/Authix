@@ -1,3 +1,7 @@
+'use client';
+import { useCallback } from 'react';
+import { useAuth } from '@/context/AuthContext';
+
 export function AboutSection() {
   return (
     <section id="about" className="min-h-screen flex items-center justify-center">
@@ -10,15 +14,15 @@ export function AboutSection() {
         </div>
         
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          <div className="glass-card p-8 bg-white/40 border-slate-200 shadow-sm">
+          <div className="glass-card p-8 bg-white/70 border-slate-200 shadow-sm">
             <h3 className="text-lg font-semibold leading-7 text-slate-900">Innovation</h3>
             <p className="mt-4 text-sm leading-6 text-slate-500">Constantly pushing the boundaries of what's possible in web security.</p>
           </div>
-          <div className="glass-card p-8 bg-white/40 border-slate-200 shadow-sm">
+          <div className="glass-card p-8 bg-white/70 border-slate-200 shadow-sm">
             <h3 className="text-lg font-semibold leading-7 text-slate-900">Privacy</h3>
             <p className="mt-4 text-sm leading-6 text-slate-500">Your data is yours. We use zero-knowledge architecture where possible.</p>
           </div>
-          <div className="glass-card p-8 bg-white/40 border-slate-200 shadow-sm">
+          <div className="glass-card p-8 bg-white/70 border-slate-200 shadow-sm">
             <h3 className="text-lg font-semibold leading-7 text-slate-900">Reliability</h3>
             <p className="mt-4 text-sm leading-6 text-slate-500">99.9% uptime guarantee for all our authentication services.</p>
           </div>
@@ -33,14 +37,14 @@ export function PricingSection() {
     {
       name: 'Hobby',
       id: 'tier-hobby',
-      price: '$0',
+      price: '₹0',
       description: 'The essentials for personal projects.',
       features: ['2FA support', 'Up to 1k users', 'Standard support'],
     },
     {
       name: 'Pro',
       id: 'tier-pro',
-      price: '$29',
+      price: '₹29',
       description: 'Advanced features for growing teams.',
       features: ['Full 3FA support', 'Up to 50k users', 'Priority support', 'Custom branding'],
     },
@@ -53,6 +57,71 @@ export function PricingSection() {
     },
   ];
 
+  const { user } = useAuth();
+
+  const handlePayment = useCallback(async (amount: number, tierName: string) => {
+    if (amount === 0) {
+      alert('This plan is free!');
+      return;
+    }
+    
+    try {
+      const response = await fetch('http://localhost:5002/api/payment/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount }),
+      });
+
+      const data = await response.json();
+      if (!data.success) throw new Error('Order creation failed');
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "Authix Security",
+        description: `Upgrade to ${tierName} Plan`,
+        order_id: data.order.id,
+        handler: async (response: any) => {
+          const verifyRes = await fetch('http://localhost:5002/api/payment/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              amount,
+              vendorId: user?.vendorId || 'VEND-UNKWN',
+              vendorName: user?.name || (user?.email ? user.email.split('@')[0] : 'Anonymous Vendor'),
+              vendorEmail: user?.email || 'unknown@example.com',
+              tierName
+            }),
+          });
+          const verifyData = await verifyRes.json();
+          if (verifyData.success) {
+            alert('Payment Successful!');
+            window.location.reload();
+          } else {
+            alert('Payment Verification Failed!');
+          }
+        },
+        prefill: {
+          name: "User Name",
+          email: "user@example.com",
+        },
+        theme: {
+          color: "#4f46e5",
+        },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error('Payment Error:', error);
+      alert('Something went wrong with the payment.');
+    }
+  }, [user]);
+
   return (
     <section id="pricing" className="min-h-screen flex items-center justify-center">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
@@ -62,7 +131,7 @@ export function PricingSection() {
         </div>
         <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 gap-y-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-8">
           {tiers.map((tier) => (
-            <div key={tier.id} className="glass-card flex flex-col justify-between p-8 xl:p-10 bg-white/40 border-slate-200 shadow-sm hover:border-indigo-500/50 transition-all">
+            <div key={tier.id} className="glass-card flex flex-col justify-between p-8 xl:p-10 bg-white/70 border-slate-200 shadow-sm hover:border-indigo-500/50 transition-all">
               <div>
                 <h3 className="text-lg font-semibold leading-8 text-slate-900">{tier.name}</h3>
                 <p className="mt-4 text-sm leading-6 text-slate-500">{tier.description}</p>
@@ -79,7 +148,10 @@ export function PricingSection() {
                   ))}
                 </ul>
               </div>
-              <button className="mt-8 block w-full rounded-full bg-slate-900 px-3 py-2 text-center text-sm font-semibold leading-6 text-white hover:bg-slate-800 transition-all">
+              <button 
+                onClick={() => handlePayment(tier.price === 'Custom' ? 500 : parseInt(tier.price.replace('₹', '')), tier.name)}
+                className="mt-8 block w-full rounded-full bg-slate-900 px-3 py-2 text-center text-sm font-semibold leading-6 text-white hover:bg-slate-800 transition-all"
+              >
                 Get started
               </button>
             </div>
@@ -115,7 +187,7 @@ export function ReviewsSection() {
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {reviews.map((review) => (
-            <figure key={review.author.name} className="glass-card p-8 bg-white/40 border-slate-200 shadow-sm hover:-translate-y-1 transition-all">
+            <figure key={review.author.name} className="glass-card p-8 bg-white/70 border-slate-200 shadow-sm hover:-translate-y-1 transition-all">
               <blockquote className="text-slate-600 italic">
                 <p>"{review.body}"</p>
               </blockquote>
@@ -141,7 +213,7 @@ export function ContactSection() {
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Get in Touch</h2>
           <p className="mt-6 text-lg leading-8 text-slate-600">Have questions about our 3FA system? Our security experts are here to help.</p>
         </div>
-        <div className="mx-auto mt-16 max-w-xl glass-card p-10 bg-white/60 border-slate-200 shadow-md">
+        <div className="mx-auto mt-16 max-w-xl glass-card p-10 bg-white/80 border-slate-200 shadow-md">
           <form className="space-y-6">
             <div>
               <label htmlFor="full-name" className="block text-sm font-semibold leading-6 text-slate-900">Full Name</label>
