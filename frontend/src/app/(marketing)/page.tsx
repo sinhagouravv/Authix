@@ -31,7 +31,7 @@ export default function Home() {
           </div>
 
           <div className="mt-20 flow-root sm:mt-24">
-            <div className="glass-card p-2 p-10 lg:p-20 bg-white/40 border-slate-200 shadow-md">
+            <div className="glass-card p-2 p-10 lg:p-20 bg-white/70 border-slate-200 shadow-md">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                 <div className="space-y-4">
                   <div className="text-4xl">🔐</div>
