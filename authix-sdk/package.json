@@ -1,0 +1,35 @@
+{
+  "name": "authix-sdk",
+  "version": "1.0.0",
+  "description": "Official SDK for Authix 3FA integration.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "authix",
+    "3fa",
+    "mfa",
+    "auth",
+    "security"
+  ],
+  "author": "Authix Team",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "lucide-react": "^0.300.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
