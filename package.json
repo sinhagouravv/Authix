@@ -2,16 +2,16 @@
   "name": "authix-monorepo",
   "private": true,
   "workspaces": [
-    "frontend",
+    "web/frontend",
     "server",
-    "admin",
-    "vendor"
+    "web/admin",
+    "web/vendor"
   ],
   "scripts": {
-    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:frontend": "npm run dev --workspace=web/frontend",
     "dev:server": "npm run dev --workspace=server",
-    "dev:admin": "npm run dev --workspace=admin",
-    "dev:vendor": "npm run dev --workspace=vendor",
+    "dev:admin": "npm run dev --workspace=web/admin",
+    "dev:vendor": "npm run dev --workspace=web/vendor",
     "test:db": "npx tsx server/src/test-db.ts",
     "install:all": "npm install"
   },
