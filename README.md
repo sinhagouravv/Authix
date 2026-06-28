@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Project Structure
 - **frontend/**: Next.js frontend application.
-- **backend/**: Shared logic, models, and server-side code.
+- **server/**: Shared logic, models, and server-side code.
 
 ## Getting Started
 

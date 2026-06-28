@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 
-import { VaultPassword } from '@backend/models/VaultPassword';
+import { VaultPassword } from '@server/models/VaultPassword';
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import mongoose from 'mongoose';
-import { Admin } from '@backend/models/Admin';
-import { VaultPassword } from '@backend/models/VaultPassword';
+import { Admin } from '@server/models/Admin';
+import { VaultPassword } from '@server/models/VaultPassword';
 import bcrypt from 'bcryptjs';
 
 export async function GET() {
