@@ -16,7 +16,7 @@ export default function ApiKeysPage() {
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-8">
           {[
             { name: 'Prod-Main-API', key: 'ax_live_••••••••••••••••3a9c', created: '2 days ago' },
             { name: 'Staging-Key', key: 'ax_test_••••••••••••••••7f2b', created: '1 month ago' },
