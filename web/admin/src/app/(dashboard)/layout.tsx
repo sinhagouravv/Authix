@@ -35,7 +35,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
       <Sidebar />
       <div className="flex flex-col w-full">
         <Header />
-        <main className={`flex-grow ${isCollapsed ? 'ml-24' : 'ml-64'} p-1 pt-26 relative overflow-x-hidden transition-all duration-300 bg-slate-50`}>
+        <main className={`flex-grow ${isCollapsed ? 'ml-24' : 'ml-64'} p-6 pt-26 relative overflow-x-hidden transition-all duration-300 bg-slate-50`}>
           {/* Subtle decorative elements for the light theme */}
           <div className="absolute top-0 right-0 -z-10 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
           <div className="absolute bottom-0 left-0 -z-10 w-1/2 h-1/2 bg-[#527FB0]/5 blur-[120px] rounded-full pointer-events-none" />
