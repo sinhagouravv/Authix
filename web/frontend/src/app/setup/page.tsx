@@ -79,7 +79,7 @@ function SetupContent() {
         </div>
 
         {/* Progress Tracker */}
-        <div className="flex items-center justify-center gap-6 mb-12">
+        <div className="flex items-center justify-center gap-5 mb-12">
           {[1, 2, 3].map((s) => (
             <React.Fragment key={s}>
               <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-500 ${step >= s ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-100 text-slate-400'}`}>
