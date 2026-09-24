@@ -71,7 +71,7 @@ function SetupContent() {
       <div className="w-full max-w-xl bg-white/80 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl shadow-indigo-500/5 border border-white p-8 md:p-12">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center p-9 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/20 mb-6">
+          <div className="inline-flex items-center justify-center p-8 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/20 mb-6">
             <ShieldCheck className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Authix 3FA Setup</h1>
