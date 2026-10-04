@@ -68,7 +68,7 @@ function SetupContent() {
         <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-purple-500/5 blur-[120px] rounded-full" />
       </div>
 
-      <div className="w-full max-w-xl bg-white/80 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl shadow-indigo-500/5 border border-white p-4 md:p-12">
+      <div className="w-full max-w-xl bg-white/80 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl shadow-indigo-500/5 border border-white p-7 md:p-12">
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center p-10 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/20 mb-5">
