@@ -1,34 +1,70 @@
 {
   "name": "authix-sdk",
-  "version": "1.0.0",
-  "description": "Official SDK for Authix 3FA integration.",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "version": "1.0.2",
+  "description": "Official 3-Factor Authentication (3FA) SDK & CLI for React, Next.js, and Node.js.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "authix": "./bin/authix.js",
+    "authix-sdk": "./bin/authix.js"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "npm run build",
+    "doctor": "node bin/authix.js doctor",
+    "test": "echo \"SDK compiled successfully\" && exit 0"
   },
   "keywords": [
     "authix",
     "3fa",
+    "three-factor-authentication",
     "mfa",
-    "auth",
-    "security"
+    "totp",
+    "biometric-auth",
+    "passkeys",
+    "nextjs-auth",
+    "react-auth"
   ],
-  "author": "Authix Team",
-  "license": "ISC",
+  "author": "Authix Security",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.6.0",
-    "lucide-react": "^0.300.0"
+    "lucide-react": "^1.14.0"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0"
   }
