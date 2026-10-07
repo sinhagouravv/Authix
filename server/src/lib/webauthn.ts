@@ -111,7 +111,7 @@ export const WebAuthnService = {
 
     const manualChallenge = crypto.randomBytes(32);
     const allowCredentials = validPasskeys.map((p: any) => ({
-      id: new Uint8Array(fromBase64URL(p.credentialID)),
+      id: p.credentialID,
       type: 'public-key' as const,
     }));
 

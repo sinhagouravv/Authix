@@ -1,6 +1,24 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 
-const AdminSchema = new mongoose.Schema({
+export interface IPasskey {
+  credentialID: string;
+  publicKey: string;
+  counter: number;
+  createdAt?: Date;
+}
+
+export interface IAdmin extends Document {
+  adminId: string;
+  password: string;
+  email: string;
+  role: string;
+  passkeys: IPasskey[];
+  currentChallenge?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const AdminSchema = new mongoose.Schema<IAdmin>({
   adminId: { type: String, required: true, unique: true, minlength: 9, maxlength: 9 },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -14,4 +32,5 @@ const AdminSchema = new mongoose.Schema({
   currentChallenge: { type: String },
 }, { timestamps: true, collection: 'admin' });
 
-export const Admin = mongoose.models.Admin || mongoose.model('Admin', AdminSchema);
+export const Admin: Model<IAdmin> = (mongoose.models.Admin as Model<IAdmin>) || mongoose.model<IAdmin>('Admin', AdminSchema);
+
