@@ -7,9 +7,7 @@ import {
   PollOptions, 
   VerificationRequestOptions 
 } from "./types";
-
-const DEFAULT_BASE_URL = "http://localhost:5002/api";
-const DEFAULT_SETUP_URL = "http://localhost:3000/setup";
+import { DEFAULT_BASE_URL, DEFAULT_SETUP_URL } from "./config";
 
 export class AuthixClient {
   private config: AuthixConfig;

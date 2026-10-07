@@ -50,7 +50,7 @@ import { AuthixProvider } from 'authix-sdk';
 const authixConfig = {
   clientId: process.env.NEXT_PUBLIC_AUTHIX_CLIENT_ID!,
   redirectUri: 'https://your-app.com/auth/callback',
-  baseUrl: 'https://api.authix.io', // or http://localhost:5002/api in dev
+  baseUrl: 'https://authix-5nkr.onrender.com/api', // or http://localhost:5002/api in dev
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -154,7 +154,7 @@ import { AuthixClient } from 'authix-sdk';
 
 const authix = new AuthixClient({
   clientId: 'YOUR_CLIENT_ID',
-  baseUrl: 'http://localhost:5002/api'
+  baseUrl: 'https://authix-5nkr.onrender.com/api' // or http://localhost:5002/api in dev
 });
 
 // 1. Start Challenge

@@ -62,6 +62,10 @@
             </svg>
         );
 
+        const PROD_API = 'https://authix-5nkr.onrender.com/api';
+        const LOCAL_API = 'http://localhost:5002/api';
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? LOCAL_API : PROD_API;
+
         const App = () => {
             const [activeTab, setActiveTab] = useState('interactive');
             const [challengeStatus, setChallengeStatus] = useState('IDLE');
@@ -82,7 +86,7 @@
                 setIsLoading(true);
                 addLog('Initiating Factor 1 & generating 3FA challenge...', 'info');
                 try {
-                    const res = await fetch('http://localhost:5002/api/start-verification', {
+                    const res = await fetch(`${API_BASE_URL}/start-verification`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -103,7 +107,7 @@
                         addLog(`Error: ${data.error}`, 'error');
                     }
                 } catch (e) {
-                    addLog(`Backend unreachable on http://localhost:5002. Make sure dev:server is running.`, 'error');
+                    addLog(`Backend unreachable on ${API_BASE_URL}. If running locally, make sure dev:server is started.`, 'error');
                 } finally {
                     setIsLoading(false);
                 }
@@ -115,7 +119,7 @@
                 setIsLoading(true);
                 addLog(`Submitting Factor 2 (TOTP: ${totpCode})...`, 'info');
                 try {
-                    const res = await fetch('http://localhost:5002/api/verify-totp', {
+                    const res = await fetch(`${API_BASE_URL}/verify-totp`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -143,7 +147,7 @@
                 setIsLoading(true);
                 addLog('Simulating customer mobile TouchID / FaceID biometric approval...', 'info');
                 try {
-                    const res = await fetch('http://localhost:5002/api/mobile/approve', {
+                    const res = await fetch(`${API_BASE_URL}/mobile/approve`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -168,7 +172,7 @@
                 if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
                 pollIntervalRef.current = setInterval(async () => {
                     try {
-                        const res = await fetch(`http://localhost:5002/api/check-status?requestId=${reqId}`);
+                        const res = await fetch(`${API_BASE_URL}/check-status?requestId=${reqId}`);
                         const data = await res.json();
                         if (data.status === 'VERIFIED') {
                             setChallengeStatus('VERIFIED');
