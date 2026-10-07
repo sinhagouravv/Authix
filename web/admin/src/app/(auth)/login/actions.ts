@@ -1,8 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5002';
+import { BACKEND_URL } from '@/config/api';
 
 export async function loginAction(adminId: string, password: string) {
   try {

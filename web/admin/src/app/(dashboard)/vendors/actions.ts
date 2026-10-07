@@ -1,6 +1,6 @@
 'use server';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5002';
+import { BACKEND_URL } from '@/config/api';
 
 export async function getVendors() {
   try {

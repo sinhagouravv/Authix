@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { BACKEND_URL } from './src/config/api';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('vendor_token')?.value;
-
-  // Define backend URL
-  const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5002';
 
   // 1. If trying to access login page
   if (pathname === '/login') {

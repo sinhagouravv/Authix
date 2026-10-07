@@ -1,6 +1,7 @@
 'use client';
 import { useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { BACKEND_URL } from '@/config/api';
 
 export function AboutSection() {
   return (
@@ -66,7 +67,7 @@ export function PricingSection() {
     }
     
     try {
-      const response = await fetch('http://localhost:5002/api/payment/order', {
+      const response = await fetch(`${BACKEND_URL}/api/payment/order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount }),
@@ -83,7 +84,7 @@ export function PricingSection() {
         description: `Upgrade to ${tierName} Plan`,
         order_id: data.order.id,
         handler: async (response: any) => {
-          const verifyRes = await fetch('http://localhost:5002/api/payment/verify', {
+          const verifyRes = await fetch(`${BACKEND_URL}/api/payment/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

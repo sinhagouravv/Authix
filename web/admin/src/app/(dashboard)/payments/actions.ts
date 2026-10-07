@@ -1,8 +1,10 @@
 'use server';
 
+import { BACKEND_URL } from '@/config/api';
+
 export async function getPayments() {
   try {
-    const response = await fetch('http://localhost:5002/api/payments', {
+    const response = await fetch(`${BACKEND_URL}/api/payments`, {
       cache: 'no-store'
     });
     if (!response.ok) return [];
@@ -19,7 +21,7 @@ export async function getPayments() {
 
 export async function deletePayment(id: string) {
   try {
-    const response = await fetch(`http://localhost:5002/api/payments/${id}`, {
+    const response = await fetch(`${BACKEND_URL}/api/payments/${id}`, {
       method: 'DELETE'
     });
     return await response.json();
