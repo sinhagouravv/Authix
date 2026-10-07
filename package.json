@@ -5,13 +5,17 @@
     "web/frontend",
     "server",
     "web/admin",
-    "web/vendor"
+    "web/vendor",
+    "developer_kit/authix-sdk"
   ],
   "scripts": {
     "dev:frontend": "npm run dev --workspace=web/frontend",
     "dev:server": "npm run dev --workspace=server",
     "dev:admin": "npm run dev --workspace=web/admin",
     "dev:vendor": "npm run dev --workspace=web/vendor",
+    "sdk:build": "npm run build --workspace=authix-sdk",
+    "sdk:pack": "npm run pack --prefix developer_kit/authix-sdk",
+    "sdk:doctor": "node developer_kit/authix-sdk/bin/authix.js doctor",
     "test:db": "npx tsx server/src/test-db.ts",
     "install:all": "npm install"
   },
@@ -19,5 +23,6 @@
     "dotenv": "^17.4.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
