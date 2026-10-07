@@ -1,7 +1,15 @@
 {
-  "name": "authix-sdk",
-  "version": "1.0.2",
+  "name": "@sinhagouravv/authix",
+  "version": "1.0.0",
   "description": "Official 3-Factor Authentication (3FA) SDK & CLI for React, Next.js, and Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sinhagouravv/Authix.git",
+    "directory": "developer_kit/authix-sdk"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

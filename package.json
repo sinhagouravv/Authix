@@ -13,7 +13,7 @@
     "dev:server": "npm run dev --workspace=server",
     "dev:admin": "npm run dev --workspace=web/admin",
     "dev:vendor": "npm run dev --workspace=web/vendor",
-    "sdk:build": "npm run build --workspace=authix-sdk",
+    "sdk:build": "npm run build --workspace=@sinhagouravv/authix",
     "sdk:pack": "npm run pack --prefix developer_kit/authix-sdk",
     "sdk:doctor": "node developer_kit/authix-sdk/bin/authix.js doctor",
     "test:db": "npx tsx server/src/test-db.ts",
