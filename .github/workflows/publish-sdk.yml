@@ -1,0 +1,40 @@
+name: Publish Authix SDK to GitHub Packages
+
+on:
+  push:
+    paths:
+      - 'developer_kit/authix-sdk/**'
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@sinhagouravv'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build SDK
+        run: npm run sdk:build
+
+      - name: Publish package to GitHub Packages
+        working-directory: developer_kit/authix-sdk
+        run: |
+          npm publish || echo "Version already published or publication skipped."
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
