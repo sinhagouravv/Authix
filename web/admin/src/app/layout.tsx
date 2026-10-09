@@ -11,6 +11,11 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Authix | Admin Panel",
   description: "Secure administrative control center for the Authix platform.",
+  icons: {
+    icon: "/AuthixLogo.svg",
+    shortcut: "/AuthixLogo.svg",
+    apple: "/AuthixLogo.svg",
+  },
 };
 
 const geistSans = Geist({

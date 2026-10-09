@@ -9,8 +9,9 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto glass-card px-8 py-3 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
-          Authix
+        <Link href="/" className="flex items-center gap-2.5 text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+          <img src="/AuthixLogo.svg" alt="Authix Logo" className="w-8 h-8 object-contain" />
+          <span>Authix</span>
         </Link>
         
         <div className="hidden md:flex items-center space-x-10 uppercase">

@@ -7,6 +7,11 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Authix | Secure Authentication",
   description: "Next-generation 3-Factor Authentication for modern applications.",
+  icons: {
+    icon: "/AuthixLogo.svg",
+    shortcut: "/AuthixLogo.svg",
+    apple: "/AuthixLogo.svg",
+  },
 };
 
 const geistSans = Geist({

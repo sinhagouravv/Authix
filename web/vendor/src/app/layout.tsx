@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Authix | Vendor Panel",
   description: "Manage your 3FA applications and API keys.",
+  icons: {
+    icon: "/AuthixLogo.svg",
+    shortcut: "/AuthixLogo.svg",
+    apple: "/AuthixLogo.svg",
+  },
 };
 
 export default function RootLayout({
