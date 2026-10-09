@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import VendorShell from "@/components/VendorShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Authix | Vendor Panel",
+  title: "Authix | Vendor",
   description: "Manage your 3FA applications and API keys.",
   icons: {
     icon: "/AuthixLogo.svg",
@@ -34,7 +35,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-screen bg-[#f8fafc]">
-        {children}
+        <VendorShell>
+          {children}
+        </VendorShell>
       </body>
     </html>
   );

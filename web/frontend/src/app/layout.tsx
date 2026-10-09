@@ -5,7 +5,7 @@ import "./globals.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Authix | Secure Authentication",
+  title: "Authix",
   description: "Next-generation 3-Factor Authentication for modern applications.",
   icons: {
     icon: "/AuthixLogo.svg",

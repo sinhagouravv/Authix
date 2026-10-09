@@ -9,7 +9,7 @@ import { ExportProvider } from "@/context/ExportContext";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Authix | Admin Panel",
+  title: "Authix | Admin",
   description: "Secure administrative control center for the Authix platform.",
   icons: {
     icon: "/AuthixLogo.svg",
