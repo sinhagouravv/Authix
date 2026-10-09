@@ -25,7 +25,15 @@ export default function VendorLoginPage() {
       <div className="w-full max-w-[440px] space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center space-y-3">
           <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl shadow-xl shadow-indigo-500/10 border border-slate-100 mb-2">
-            <Image src="/AuthixLogo.svg" alt="Authix Logo" width={48} height={48} />
+            <Image 
+              src="/AuthixLogo.svg" 
+              alt="Authix Logo" 
+              width={48} 
+              height={48} 
+              className="h-12 w-auto object-contain"
+              style={{ width: 'auto', height: 'auto' }}
+              priority 
+            />
           </div>
           <h1 className="text-3xl font-black text-[#052558] tracking-tight uppercase">Vendor Panel</h1>
           <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.2em]">Secure Access Control</p>

@@ -221,6 +221,7 @@ export default function Sidebar() {
                   src="/AuthixLogo.svg"
                   alt="Authix Logo"
                   width={32}
+                  
                   height={32}
                   className="w-10 h-8 object-contain cursor-pointer hover:scale-105 transition-transform"
                   onClick={toggleSidebar}

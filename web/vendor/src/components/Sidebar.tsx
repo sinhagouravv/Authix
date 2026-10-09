@@ -68,7 +68,7 @@ export default function Sidebar() {
           <div className={`flex items-center gap-3 ${isCollapsed ? 'hidden' : 'flex'}`}>
               <Image src="/AuthixLogo.svg" alt="Authix Logo" width={32} height={32} className="w-8 h-8 object-contain" />
               <div>
-                  <h1 className="text-xl font-bold text-[#052558] tracking-tight uppercase">AUTHIX</h1>
+                  <h1 className="text-xl font-bold text-[#052558] tracking-tight">AUTHIX</h1>
               </div>
           </div>
           
@@ -106,7 +106,6 @@ export default function Sidebar() {
           {!isCollapsed && <span className="text-xs uppercase font-bold tracking-tight">Sign Out</span>}
         </button>
       </div>
-
     </aside>
   );
 }
